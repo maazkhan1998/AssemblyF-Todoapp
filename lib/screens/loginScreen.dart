@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:todoapp/screens/landingScreen.dart';
 import 'package:todoapp/screens/signUpScreen.dart';
+import 'package:todoapp/services/authServices.dart';
 import 'package:todoapp/shared/customButton.dart';
 import 'package:todoapp/shared/customTextField.dart';
 
@@ -13,6 +15,20 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  AuthServices _authServices = AuthServices();
+
+  onPress() async {
+    try {
+      await _authServices.loginUser(
+          emailController.text.trim(), passwordController.text.trim());
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const LandingScreen()));
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 CustomButton(
                   child: const Text("Login"),
-                  onPress: () {},
+                  onPress: onPress,
                 ),
                 Row(
                   children: <Widget>[
